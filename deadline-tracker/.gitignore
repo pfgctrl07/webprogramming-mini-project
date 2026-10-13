@@ -1,0 +1,15 @@
+# React demo build artifacts / dependencies
+react-demo/node_modules/
+react-demo/dist/
+
+# Generated CSV reports (keep the folder, not its contents)
+reports/*.csv
+
+# start.sh runtime logs/pid files
+.run/
+
+# OS / editor noise
+.DS_Store
+*.log
+.vscode/
+.idea/

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" width="640" height="220" role="img" aria-labelledby="diagramTitle diagramDesc">
+  <title id="diagramTitle">Client-server model used by Deadline Tracker</title>
+  <desc id="diagramDesc">A browser sends an HTTP request through the Internet to a PHP web server, which queries a MySQL database and returns an HTML response.</desc>
+  <style>
+    .box { fill: #0f2a43; stroke: #2fb6a7; stroke-width: 2; rx: 10; }
+    .label { fill: #ffffff; font-family: Arial, sans-serif; font-size: 15px; font-weight: bold; text-anchor: middle; }
+    .sub { fill: #c9d6e3; font-family: Arial, sans-serif; font-size: 11px; text-anchor: middle; }
+    .arrow { stroke: #2fb6a7; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2fb6a7" />
+    </marker>
+  </defs>
+
+  <rect class="box" x="20"  y="70" width="140" height="80"></rect>
+  <text class="label" x="90" y="105">Browser</text>
+  <text class="sub"   x="90" y="124">(Client / HTML, CSS, JS)</text>
+
+  <rect class="box" x="250" y="70" width="140" height="80"></rect>
+  <text class="label" x="320" y="100">Web Server</text>
+  <text class="sub"   x="320" y="118">(PHP application</text>
+  <text class="sub"   x="320" y="132">logic)</text>
+
+  <rect class="box" x="480" y="70" width="140" height="80"></rect>
+  <text class="label" x="550" y="105">MySQL</text>
+  <text class="sub"   x="550" y="124">(Database server)</text>
+
+  <path class="arrow" d="M160 100 L250 100"></path>
+  <text class="sub" x="205" y="90">HTTP request</text>
+
+  <path class="arrow" d="M390 120 L160 120" transform="translate(0,0)"></path>
+  <text class="sub" x="205" y="140">HTML response</text>
+
+  <path class="arrow" d="M390 95 L480 95"></path>
+  <text class="sub" x="435" y="85">SQL query</text>
+
+  <path class="arrow" d="M480 115 L390 115"></path>
+  <text class="sub" x="435" y="135">Result set</text>
+</svg>
