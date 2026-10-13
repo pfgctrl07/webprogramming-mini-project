@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks | Deadline Tracker</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body onload="initCommon()">
+
+<header class="app-topbar navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <button class="btn btn-sidebar-toggle d-lg-none" type="button" id="sidebarToggle" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+        </button>
+        <a class="navbar-brand app-brand" href="index.html">
+            <span class="brand-mark"><i class="bi bi-check2-square"></i> DT</span> Deadline Tracker
+        </a>
+        <div class="topbar-tagline d-none d-md-block"><i class="bi bi-mortarboard"></i> Student Task Management System</div>
+    </div>
+</header>
+
+<div class="app-shell">
+    <nav class="app-sidebar" id="appSidebar" aria-label="Primary navigation">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link active" href="tasks.html"><i class="bi bi-list-task"></i> My Tasks</a></li>
+            <li class="nav-item"><a class="nav-link" href="insights.html"><i class="bi bi-lightbulb"></i> Insights</a></li>
+            <li class="nav-item"><a class="nav-link" href="focus.html"><i class="bi bi-stopwatch"></i> Focus Mode</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html"><i class="bi bi-info-circle"></i> About / Web Concepts</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" id="exportCsvBtn"><i class="bi bi-file-earmark-spreadsheet"></i> Export CSV Report</a></li>
+        </ul>
+        <div class="sidebar-footer d-none d-lg-block">
+            <p><i class="bi bi-person-circle"></i> Logged work for:<br><strong>jeevithamproject@gmail.com</strong></p>
+        </div>
+    </nav>
+
+    <main class="app-main">
+        <div id="flashContainer"></div>
+
+        <div class="static-demo-banner">
+            <span><i class="bi bi-info-circle"></i> Static demo — all data lives only in your browser (localStorage), not a real MySQL database. The full PHP + MySQL source is in the repo.</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="resetDemoDataBtn"><i class="bi bi-arrow-counterclockwise"></i> Reset Demo Data</button>
+        </div>
+
+        <section class="page-section" aria-labelledby="tasksHeading">
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                <h1 id="tasksHeading" class="page-title"><i class="bi bi-list-task"></i> My Tasks</h1>
+                <button type="button" class="btn btn-primary btn-add-task" id="addTaskBtn"><i class="bi bi-plus-lg"></i> Add New Task</button>
+            </div>
+
+            <form class="panel-card filter-toolbar" id="filterForm">
+                <div class="row g-3 align-items-start">
+                    <div class="col-md-3">
+                        <label for="searchInput" class="form-label"><i class="bi bi-search"></i> Search tasks</label>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Title, subject, description...">
+                    </div>
+
+                    <div class="col-md-3">
+                        <fieldset class="filter-fieldset">
+                            <legend><i class="bi bi-funnel"></i> Status</legend>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="status[]" id="statusPending" value="Pending">
+                                <label class="form-check-label" for="statusPending">Pending</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="status[]" id="statusCompleted" value="Completed">
+                                <label class="form-check-label" for="statusCompleted">Completed</label>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="priorityListBox" class="form-label"><i class="bi bi-flag"></i> Priority (list box)</label>
+                        <select id="priorityListBox" class="form-select" multiple size="3">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="subjectSelect" class="form-label"><i class="bi bi-journal-bookmark"></i> Subject</label>
+                        <select id="subjectSelect" class="form-select">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="sortSelect" class="form-label"><i class="bi bi-sort-down"></i> Sort by</label>
+                        <select id="sortSelect" class="form-select">
+                            <option value="deadline_asc">Deadline (soonest)</option>
+                            <option value="deadline_desc">Deadline (latest)</option>
+                            <option value="priority_desc">Priority (high first)</option>
+                            <option value="priority_asc">Priority (low first)</option>
+                            <option value="created_desc">Newest created</option>
+                            <option value="created_asc">Oldest created</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions mt-3">
+                    <button type="submit" class="btn btn-outline-primary"><i class="bi bi-filter-circle"></i> Apply</button>
+                    <button type="button" class="btn btn-outline-secondary" id="resetFiltersBtn"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+                </div>
+            </form>
+
+            <div class="view-toggle mt-4" role="group" aria-label="Task view switch">
+                <button type="button" id="viewToggleList" class="btn btn-sm btn-view active" onclick="showTaskView('list')">
+                    <i class="bi bi-list-ul"></i> List View
+                </button>
+                <button type="button" id="viewToggleBoard" class="btn btn-sm btn-view" onclick="showTaskView('board')">
+                    <i class="bi bi-kanban"></i> Board View
+                </button>
+            </div>
+
+            <div class="task-list mt-3" id="listView"></div>
+            <div class="kanban-board is-hidden" id="boardView"></div>
+        </section>
+    </main>
+</div>
+
+<div class="custom-modal-overlay" id="taskModalOverlay">
+    <div class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+        <div class="custom-modal-header">
+            <h2 id="taskModalTitle"><i class="bi bi-plus-circle"></i> Add New Task</h2>
+            <button type="button" class="custom-modal-close" onclick="closeTaskModal()" aria-label="Close">&times;</button>
+        </div>
+
+        <form id="taskForm" novalidate>
+            <input type="hidden" id="taskFormAction" value="create">
+            <input type="hidden" id="taskId" value="">
+
+            <div class="mb-3">
+                <label for="taskTitle" class="form-label">Task Title *</label>
+                <input type="text" class="form-control" id="taskTitle" name="title" maxlength="150" required onblur="validateField(this)">
+                <small class="field-error" id="taskTitleError"></small>
+            </div>
+
+            <div class="mb-3">
+                <label for="taskSubject" class="form-label">Subject / Course *</label>
+                <input type="text" class="form-control" id="taskSubject" name="subject" maxlength="100" required onblur="validateField(this)">
+                <small class="field-error" id="taskSubjectError"></small>
+            </div>
+
+            <div class="mb-3">
+                <label for="taskDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="taskDescription" name="description" rows="3" maxlength="1000"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="taskDeadline" class="form-label">Deadline *</label>
+                <input type="datetime-local" class="form-control" id="taskDeadline" name="deadline" required onblur="validateField(this)">
+                <small class="field-error" id="taskDeadlineError"></small>
+            </div>
+
+            <fieldset class="mb-3">
+                <legend><i class="bi bi-flag"></i> Priority *</legend>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="priority" id="priorityLow" value="Low">
+                    <label class="form-check-label" for="priorityLow">Low</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="priority" id="priorityMedium" value="Medium" checked>
+                    <label class="form-check-label" for="priorityMedium">Medium</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="priority" id="priorityHigh" value="High">
+                    <label class="form-check-label" for="priorityHigh">High</label>
+                </div>
+            </fieldset>
+
+            <fieldset class="mb-3" id="statusFieldset">
+                <legend><i class="bi bi-toggle2-on"></i> Status</legend>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="status" id="statusFormPending" value="Pending" checked>
+                    <label class="form-check-label" for="statusFormPending">Pending</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="status" id="statusFormCompleted" value="Completed">
+                    <label class="form-check-label" for="statusFormCompleted">Completed</label>
+                </div>
+            </fieldset>
+
+            <div class="custom-modal-footer">
+                <button type="button" class="btn btn-outline-secondary" onclick="resetTaskForm()"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Task</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmLabel"><i class="bi bi-exclamation-triangle text-danger"></i> Delete Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="deleteConfirmForm">
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteTaskTitle"></strong>? This cannot be undone.</p>
+                    <input type="hidden" id="deleteTaskId" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Delete Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="app-footer">
+    <div class="container-fluid">
+        <p><i class="bi bi-check2-square"></i> &copy; 2026 Deadline Tracker &mdash; Web Programming Mini Project. Built with HTML5, CSS3, vanilla JavaScript, PHP and MySQL (this page: static client-side demo).</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/tasks.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(location.search);
+        if (params.get('action') === 'new') {
+            openTaskModal();
+        }
+    });
+</script>
+</body>
+</html>

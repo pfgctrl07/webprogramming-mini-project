@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About / Web Concepts | Deadline Tracker</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body onload="initCommon()">
+
+<header class="app-topbar navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <button class="btn btn-sidebar-toggle d-lg-none" type="button" id="sidebarToggle" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+        </button>
+        <a class="navbar-brand app-brand" href="index.html">
+            <span class="brand-mark"><i class="bi bi-check2-square"></i> DT</span> Deadline Tracker
+        </a>
+        <div class="topbar-tagline d-none d-md-block"><i class="bi bi-mortarboard"></i> Student Task Management System</div>
+    </div>
+</header>
+
+<div class="app-shell">
+    <nav class="app-sidebar" id="appSidebar" aria-label="Primary navigation">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="tasks.html"><i class="bi bi-list-task"></i> My Tasks</a></li>
+            <li class="nav-item"><a class="nav-link" href="insights.html"><i class="bi bi-lightbulb"></i> Insights</a></li>
+            <li class="nav-item"><a class="nav-link" href="focus.html"><i class="bi bi-stopwatch"></i> Focus Mode</a></li>
+            <li class="nav-item"><a class="nav-link active" href="about.html"><i class="bi bi-info-circle"></i> About / Web Concepts</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" id="exportCsvBtn"><i class="bi bi-file-earmark-spreadsheet"></i> Export CSV Report</a></li>
+        </ul>
+        <div class="sidebar-footer d-none d-lg-block">
+            <p><i class="bi bi-person-circle"></i> Logged work for:<br><strong>jeevithamproject@gmail.com</strong></p>
+        </div>
+    </nav>
+
+    <main class="app-main">
+        <div id="flashContainer"></div>
+
+        <div class="static-demo-banner">
+            <span><i class="bi bi-info-circle"></i> Static demo — all data lives only in your browser (localStorage), not a real MySQL database. The full PHP + MySQL source is in the repo.</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="resetDemoDataBtn"><i class="bi bi-arrow-counterclockwise"></i> Reset Demo Data</button>
+        </div>
+
+        <section class="page-section" aria-labelledby="aboutHeading">
+            <h1 id="aboutHeading" class="page-title"><i class="bi bi-info-circle"></i> About &amp; Web Concepts</h1>
+            <p class="page-intro">
+                A short, practical tour of the foundational Web Programming concepts
+                this project is built on. Full explanations and setup notes live in
+                the project <code>README.md</code>. This particular page is a static
+                client-side build — the real app's version is <code>about.php</code>.
+            </p>
+
+            <article class="panel-card">
+                <h2 class="panel-title"><i class="bi bi-globe2"></i> The World Wide Web, in brief</h2>
+                <p>
+                    The <strong>World Wide Web</strong> began in 1989 as a way to share linked
+                    documents over the Internet; it has since evolved from static pages
+                    to the dynamic, database-backed applications like this tracker.
+                    Related Internet services include <strong>Email</strong> (message
+                    delivery via SMTP/IMAP), <strong>Telnet</strong> (remote terminal
+                    access), and <strong>FTP</strong> (file transfer) &mdash; all predate the
+                    Web but still run over the same Internet infrastructure. Modern
+                    uses built on top of the Web include <strong>e-commerce</strong>,
+                    <strong>cloud computing</strong> (renting storage/compute instead of
+                    owning servers), and <strong>video conferencing</strong>.
+                </p>
+            </article>
+
+            <article class="panel-card">
+                <h2 class="panel-title"><i class="bi bi-diagram-3"></i> How a request reaches this application</h2>
+                <img src="assets/images/client-server-diagram.svg"
+                     alt="Diagram: a browser sends an HTTP request through the Internet to a PHP web server, which queries a MySQL database and returns an HTML response."
+                     class="concept-diagram">
+                <ul class="concept-list">
+                    <li><strong>ISP (Internet Service Provider):</strong> the company that connects your device to the Internet backbone.</li>
+                    <li><strong>IP address:</strong> the numeric address (e.g. <code>127.0.0.1</code>) a server is reached at.</li>
+                    <li><strong>URL:</strong> a human-readable address such as <code>http://localhost/deadline-tracker/index.php</code> that identifies a resource.</li>
+                    <li><strong>DNS (Domain Name Server):</strong> translates a domain name into the IP address it maps to.</li>
+                    <li><strong>Web browser:</strong> the client that sends HTTP requests and renders the HTML/CSS/JS response (Chrome, Firefox, Safari...).</li>
+                    <li><strong>Search engine:</strong> a separate service (e.g. Google) that crawls and indexes pages so users can find them by keyword.</li>
+                </ul>
+            </article>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <article class="panel-card h-100">
+                        <h2 class="panel-title"><i class="bi bi-hdd-network"></i> Web server vs. application server</h2>
+                        <p>A <strong>web server</strong> (Apache, Nginx, or PHP's built-in server)
+                           accepts HTTP requests and returns static files or hands dynamic
+                           requests off for processing. An <strong>application server</strong>
+                           executes the business logic &mdash; here, that's PHP reading/writing
+                           the <code>tasks</code> table via PDO. In this project PHP's
+                           built-in development server plays both roles locally. (This
+                           particular static page has no application server at all &mdash;
+                           everything runs in the browser.)</p>
+                    </article>
+                </div>
+                <div class="col-lg-6">
+                    <article class="panel-card h-100">
+                        <h2 class="panel-title"><i class="bi bi-phone"></i> ReactJS vs. React Native</h2>
+                        <p><strong>ReactJS</strong> renders to the browser DOM and is used
+                           for web applications &mdash; see the <code>react-demo/</code> folder
+                           in this project. <strong>React Native</strong> uses the same
+                           component/JSX model but renders to native mobile UI
+                           components (iOS/Android) instead of the DOM, and is not
+                           used anywhere in this project since it targets mobile apps,
+                           not the Web.</p>
+                    </article>
+                </div>
+            </div>
+
+            <article class="panel-card">
+                <h2 class="panel-title"><i class="bi bi-code-slash"></i> JavaScript basics, live</h2>
+                <p>A tiny, self-contained demo of the fundamentals from Unit II:
+                    a button wired to a function, a variable, and a plain JavaScript
+                    object, all defined in the external file
+                    <code>assets/js/ui.js</code>.</p>
+                <button type="button" class="btn btn-outline-primary" onclick="sayHello()"
+                        onmouseover="this.classList.add('btn-primary'); this.classList.remove('btn-outline-primary')"
+                        onmouseout="this.classList.add('btn-outline-primary'); this.classList.remove('btn-primary')">
+                    <i class="bi bi-hand-index-thumb"></i> Say Hello
+                </button>
+                <p id="helloOutput" class="mt-3 mb-0 text-muted">Click the button to run a JavaScript function.</p>
+            </article>
+
+            <article class="panel-card">
+                <h2 class="panel-title"><i class="bi bi-git"></i> Hosting, Git, and React DevTools</h2>
+                <p>Static hosting (for this page, and for the React demo) simply means
+                    a server returns the pre-built HTML/JS/CSS files as-is; see
+                    <code>react-demo/README.md</code> for exact deployment steps. The
+                    root <code>README.md</code> also documents the handful of Git
+                    commands (<code>init</code>, <code>add</code>, <code>commit</code>,
+                    <code>push</code>) used to version this project, and explains the
+                    React Developer Tools browser extension used to inspect the
+                    component tree and state while the React demo is open.</p>
+            </article>
+        </section>
+    </main>
+</div>
+
+<footer class="app-footer">
+    <div class="container-fluid">
+        <p><i class="bi bi-check2-square"></i> &copy; 2026 Deadline Tracker &mdash; Web Programming Mini Project. Built with HTML5, CSS3, vanilla JavaScript, PHP and MySQL (this page: static client-side demo).</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>
